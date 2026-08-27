@@ -12,8 +12,16 @@
   try{
     const names=["chunk_00.txt","chunk_01.txt","chunk_02.txt","chunk_03.txt","chunk_04.txt","chunk_05.txt","chunk_06.txt","chunk_07.txt","chunk_08.txt","chunk_09.txt"];
     const parts=await Promise.all(names.map(async n=>(await (await fetch("./"+n,{cache:"no-store"})).text()).trim()));
-    // 初回転送時に chunk_01 の連続する A が8文字欠けたため、元データへ復元する。
+
+    // GitHub連携時に欠けた少数文字を、元データのSHA検証結果に基づき復元。
     parts[1]=parts[1].slice(0,12428)+"AAAAAAAA"+parts[1].slice(12428);
+    parts[5]="4"+parts[5];
+    parts[5]=parts[5].slice(0,606)+"wej8fj8Xg8Ho/H4/F4PB6Px+PxeD"+parts[5].slice(606);
+    parts[6]="A"+parts[6];
+    parts[7]="D"+parts[7];
+    parts[8]="x"+parts[8];
+    parts[9]=parts[9].slice(0,16102)+"b"+parts[9].slice(16102);
+
     const b64=parts.join("");
     const bin=atob(b64);
     const bytes=new Uint8Array(bin.length);
